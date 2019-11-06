@@ -37,5 +37,7 @@ module.exports = {
         'react/sort-comp': 'off',
         'react/static-property-placement': 'off',
         'camelcase': 'off',
+        'no-param-reassign': 'off',
+        'react/prefer-stateless-function': 'off',
     },
   };

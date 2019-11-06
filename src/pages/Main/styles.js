@@ -16,7 +16,7 @@ export const ProductCard = styled.View`
     background: #fff;
     width: 250px;
     height: 60%;
-    padding: 20px;
+    padding: 10px;
     margin-right: 20px;
     border-radius: 4px;
 `;

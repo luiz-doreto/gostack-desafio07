@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import * as CartActions from '../../store/modules/cart/actions';
 
 import {
     Container,
@@ -20,9 +24,11 @@ import Header from '../../components/Header';
 import { formatPrice } from '../../util/format';
 import api from '../../services/api';
 
-export default class Main extends Component {
+class Main extends Component {
     static propTypes = {
         navigation: PropTypes.shape({}).isRequired,
+        addToCartRequest: PropTypes.func.isRequired,
+        amount: PropTypes.shape({}).isRequired,
     };
 
     state = {
@@ -42,7 +48,7 @@ export default class Main extends Component {
 
     render() {
         const { products } = this.state;
-        const { navigation } = this.props;
+        const { navigation, addToCartRequest, amount } = this.props;
 
         return (
             <Container>
@@ -57,7 +63,7 @@ export default class Main extends Component {
                             <ProductTitle>{item.title}</ProductTitle>
                             <ProductPrice>{item.formattedPrice}</ProductPrice>
                             <ProductButton
-                                onPress={() => console.tron.log('eai')}
+                                onPress={() => addToCartRequest(item.id)}
                             >
                                 <ProductButtonCartContainer>
                                     <ProductButtonIcon
@@ -66,7 +72,7 @@ export default class Main extends Component {
                                         color="#fff"
                                     />
                                     <ProductButtonCartText>
-                                        {0}
+                                        {amount[item.id] || 0}
                                     </ProductButtonCartText>
                                 </ProductButtonCartContainer>
                                 <ProductButtonTextContainer>
@@ -82,3 +88,18 @@ export default class Main extends Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    amount: state.cart.reduce((amount, product) => {
+        amount[product.id] = product.amount;
+        return amount;
+    }, {}),
+});
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(CartActions, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Main);
