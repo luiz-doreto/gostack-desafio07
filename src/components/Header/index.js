@@ -1,12 +1,14 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import logo from '../../assets/logo.png';
 import { Container, Logo, Cart, CartCounter, CartIcon } from './styles';
 
-function Header({ products, navigation }) {
+export default function Header({ navigation }) {
+    const products = useSelector(state => state.cart.length);
+
     return (
         <Container>
             <TouchableOpacity onPress={() => navigation.navigate('Main')}>
@@ -24,11 +26,4 @@ Header.propTypes = {
     navigation: PropTypes.shape({
         navigate: PropTypes.func,
     }).isRequired,
-    products: PropTypes.number.isRequired,
 };
-
-const mapStateToProps = state => ({
-    products: state.cart.length,
-});
-
-export default connect(mapStateToProps)(Header);
